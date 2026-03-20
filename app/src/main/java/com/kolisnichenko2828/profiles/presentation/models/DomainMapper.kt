@@ -1,9 +1,9 @@
-package com.kolisnichenko2828.profiles.data.local
+package com.kolisnichenko2828.profiles.presentation.models
 
 import com.kolisnichenko2828.profiles.domain.ContactDomainModel
 import com.kolisnichenko2828.profiles.domain.ProfileDomainModel
 
-fun ContactEntityModel.toDomain(): ContactDomainModel {
+fun ContactUiModel.toDomain(): ContactDomainModel {
     return ContactDomainModel(
         id = this.id,
         firstName = this.firstName,
@@ -15,13 +15,7 @@ fun ContactEntityModel.toDomain(): ContactDomainModel {
     )
 }
 
-fun List<ContactEntityModel>.toDomain(): List<ContactDomainModel> {
-    return this.map {
-        it.toDomain()
-    }
-}
-
-fun ProfileEntityModel.toDomain(): ProfileDomainModel {
+fun ProfileUiModel.toDomain(): ProfileDomainModel {
     return ProfileDomainModel(
         id = this.id,
         firstName = this.firstName,

@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.details
+package com.kolisnichenko2828.profiles.presentation.contacts.contacts_details
 
 import androidx.lifecycle.ViewModel
 

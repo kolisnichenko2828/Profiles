@@ -1,11 +1,11 @@
-package com.kolisnichenko2828.profiles.presentation.users
+package com.kolisnichenko2828.profiles.presentation.contacts.contacts_list
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun UsersScreen(
+fun ListScreen(
     onUserClick: (id: Int) -> Unit
 ) {
-    Text(text = "users screen")
+    Text(text = "list screen")
 }

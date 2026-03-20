@@ -1,8 +1,9 @@
-package com.kolisnichenko2828.profiles
+package com.kolisnichenko2828.profiles.presentation.profile.profile_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kolisnichenko2828.profiles.data.repository.ProfileRepository
+import com.kolisnichenko2828.profiles.domain.toUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,43 +12,48 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class ProfileDetailsViewModel(
     val repository: ProfileRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(MainContract.State())
+    private val _uiState = MutableStateFlow(ProfileDetailsContract.State())
     val uiState = _uiState
         .onStart {
-            setEvent(MainContract.Event.InitialLoad())
+            setEvent(ProfileDetailsContract.Event.InitialLoad)
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = MainContract.State()
+            initialValue = ProfileDetailsContract.State()
         )
 
-    fun setEvent(event: MainContract.Event) {
+    fun setEvent(event: ProfileDetailsContract.Event) {
         when (event) {
-            is MainContract.Event.InitialLoad -> { getOwnDetails() }
+            is ProfileDetailsContract.Event.InitialLoad -> { getProfile() }
         }
     }
 
-    private fun getOwnDetails() {
+    private fun getProfile() {
         viewModelScope.launch(Dispatchers.IO) {
-            val profile = repository.getProfile()
-            profile.fold(
-                onSuccess = {
+            _uiState.update {
+                it.copy(
+                    errorMessage = null,
+                    profile = null
+                )
+            }
+
+            val profileModel = repository.getProfile()
+            profileModel.fold(
+                onSuccess = { profile ->
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
-                            isProfileExist = true
+                            profile = profile.toUi()
                         )
                     }
                 },
-                onFailure = {
+                onFailure = { exception ->
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
-                            isProfileExist = false
+                            errorMessage = exception.localizedMessage
                         )
                     }
                 }

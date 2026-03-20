@@ -1,21 +1,26 @@
 package com.kolisnichenko2828.profiles.di
 
 import androidx.room.Room
-import com.kolisnichenko2828.profiles.data.local.UsersDao
-import com.kolisnichenko2828.profiles.data.local.UsersDatabase
+import com.kolisnichenko2828.profiles.data.local.ContactsDao
+import com.kolisnichenko2828.profiles.data.local.ContactsDatabase
+import com.kolisnichenko2828.profiles.data.local.ProfileDao
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val localModule = module {
-    single<UsersDatabase> {
+    single<ContactsDatabase> {
         Room.databaseBuilder(
             androidContext(),
-            UsersDatabase::class.java,
+            ContactsDatabase::class.java,
             "users"
         ).build()
     }
 
-    single<UsersDao> {
-        get<UsersDatabase>().usersDao()
+    single<ContactsDao> {
+        get<ContactsDatabase>().contactsDao()
+    }
+
+    single<ProfileDao> {
+        get<ContactsDatabase>().profileDao()
     }
 }
