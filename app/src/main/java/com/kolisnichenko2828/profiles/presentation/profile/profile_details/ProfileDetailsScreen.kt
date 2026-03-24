@@ -1,6 +1,5 @@
 package com.kolisnichenko2828.profiles.presentation.profile.profile_details
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,16 +13,10 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileDetailsScreen(
-    onNavigateBack: () -> Unit,
-    onEditProfile: () -> Unit,
     viewModel: ProfileDetailsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentState = uiState
-
-    BackHandler {
-        onNavigateBack()
-    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),

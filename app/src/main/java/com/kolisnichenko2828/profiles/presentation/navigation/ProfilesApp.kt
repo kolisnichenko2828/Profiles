@@ -47,19 +47,7 @@ fun ProfilesApp(
                     )
                 }
                 entry<Screen.ProfileDetails> {
-                    ProfileDetailsScreen(
-                        onNavigateBack = {
-                            if (backStack.size > 1) {
-                                backStack.removeLastOrNull()
-                            } else {
-                                backStack.clear()
-                                backStack.add(Screen.List)
-                            }
-                        },
-                        onEditProfile = {
-
-                        }
-                    )
+                    ProfileDetailsScreen()
                 }
                 entry<Screen.List>(
                     metadata = ListDetailSceneStrategy.listPane(

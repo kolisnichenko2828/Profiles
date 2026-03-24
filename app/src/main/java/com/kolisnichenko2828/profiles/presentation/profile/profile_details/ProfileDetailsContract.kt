@@ -1,6 +1,6 @@
 package com.kolisnichenko2828.profiles.presentation.profile.profile_details
 
-import com.kolisnichenko2828.profiles.presentation.models.ProfileUiModel
+import com.kolisnichenko2828.profiles.presentation.profile.profile_details.model.ProfileUiModel
 
 interface ProfileDetailsContract {
     data class State(

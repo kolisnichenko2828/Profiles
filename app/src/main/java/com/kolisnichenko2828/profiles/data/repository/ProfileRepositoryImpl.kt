@@ -3,13 +3,14 @@ package com.kolisnichenko2828.profiles.data.repository
 import com.kolisnichenko2828.profiles.data.local.ProfileDao
 import com.kolisnichenko2828.profiles.data.local.toDomain
 import com.kolisnichenko2828.profiles.domain.ProfileDomainModel
+import com.kolisnichenko2828.profiles.domain.ProfileRepository
 import com.kolisnichenko2828.profiles.domain.toEntity
 import java.util.concurrent.CancellationException
 
-class ProfileRepository(
-    val dao: ProfileDao
-) {
-    suspend fun getProfile(): Result<ProfileDomainModel> {
+class ProfileRepositoryImpl(
+    private val dao: ProfileDao
+) : ProfileRepository {
+    override suspend fun getProfile(): Result<ProfileDomainModel> {
         val ownProfile = runCatching { dao.getProfile() }
         ownProfile.fold(
             onSuccess = { entity ->
@@ -22,7 +23,7 @@ class ProfileRepository(
         )
     }
 
-    suspend fun saveProfile(profile: ProfileDomainModel): Result<Unit> {
+    override suspend fun saveProfile(profile: ProfileDomainModel): Result<Unit> {
         val result = runCatching { dao.insertProfile(profile.toEntity()) }
         result.fold(
             onSuccess = {
