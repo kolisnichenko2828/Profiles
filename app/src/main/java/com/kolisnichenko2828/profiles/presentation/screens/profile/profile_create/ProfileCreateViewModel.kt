@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_create
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

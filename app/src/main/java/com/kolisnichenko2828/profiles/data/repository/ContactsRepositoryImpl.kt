@@ -2,9 +2,9 @@ package com.kolisnichenko2828.profiles.data.repository
 
 import com.kolisnichenko2828.profiles.data.local.ContactsDao
 import com.kolisnichenko2828.profiles.data.local.toDomain
+import com.kolisnichenko2828.profiles.data.local.toEntity
 import com.kolisnichenko2828.profiles.domain.ContactDomainModel
 import com.kolisnichenko2828.profiles.domain.ContactsRepository
-import com.kolisnichenko2828.profiles.domain.toEntity
 import java.util.concurrent.CancellationException
 
 class ContactsRepositoryImpl(

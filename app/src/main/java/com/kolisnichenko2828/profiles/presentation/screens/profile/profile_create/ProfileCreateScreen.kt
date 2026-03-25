@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_create
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.profiles.R
-import com.kolisnichenko2828.profiles.presentation.profile.profile_create.components.CreateTextField
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_create.components.CreateTextField
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,7 +45,7 @@ fun ProfileCreateScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is ProfileCreateContract.Effect -> onNavigateToDetails()
+                is ProfileCreateContract.Effect.NavigateToProfile -> onNavigateToDetails()
             }
         }
     }

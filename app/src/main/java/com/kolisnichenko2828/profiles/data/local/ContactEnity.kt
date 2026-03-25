@@ -33,3 +33,14 @@ fun List<ContactEntity>.toDomain(): List<ContactDomainModel> {
         it.toDomain()
     }
 }
+
+fun ContactDomainModel.toEntity(): ContactEntity {
+    return ContactEntity(
+        firstName = this.firstName,
+        lastName = this.lastName,
+        phone = this.phone,
+        email = this.email,
+        dateOfBirth = this.dateOfBirth,
+        category = this.category
+    )
+}

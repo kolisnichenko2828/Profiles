@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_details.components
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
-import com.kolisnichenko2828.profiles.presentation.profile.profile_details.model.ProfileUiModel
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.model.ProfileUiModel
 
 @Composable
 fun ProfileDetailsContent(

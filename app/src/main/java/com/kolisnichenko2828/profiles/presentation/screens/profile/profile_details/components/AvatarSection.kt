@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_details.components
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

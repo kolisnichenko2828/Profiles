@@ -1,9 +1,9 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_details
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kolisnichenko2828.profiles.domain.ProfileRepository
-import com.kolisnichenko2828.profiles.domain.toUi
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.model.toUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

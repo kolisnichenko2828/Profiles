@@ -15,10 +15,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.kolisnichenko2828.profiles.presentation.profile.profile_create.ProfileCreateScreen
-import com.kolisnichenko2828.profiles.presentation.contacts.contacts_details.DetailsScreen
-import com.kolisnichenko2828.profiles.presentation.profile.profile_details.ProfileDetailsScreen
-import com.kolisnichenko2828.profiles.presentation.contacts.contacts_list.ListScreen
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_create.ProfileCreateScreen
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_details.DetailsScreen
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileDetailsScreen
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_list.ListScreen
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)

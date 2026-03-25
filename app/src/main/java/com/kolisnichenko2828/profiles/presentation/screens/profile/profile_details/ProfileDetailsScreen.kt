@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.profile.profile_details
+package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kolisnichenko2828.profiles.presentation.profile.profile_details.components.ProfileDetailsContent
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.components.ProfileDetailsContent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

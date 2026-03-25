@@ -23,3 +23,13 @@ fun ProfileEntityModel.toDomain(): ProfileDomainModel {
         dateOfBirth = this.dateOfBirth
     )
 }
+
+fun ProfileDomainModel.toEntity(): ProfileEntityModel {
+    return ProfileEntityModel(
+        firstName = this.firstName,
+        lastName = this.lastName,
+        phone = this.phone,
+        email = this.email,
+        dateOfBirth = this.dateOfBirth
+    )
+}
