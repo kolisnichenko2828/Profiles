@@ -143,8 +143,8 @@ private fun ProfileEditContentPreview() {
             uiState = ProfileEditContract.State(
                 isLoading = false,
                 errorMessage = null,
-                firstName = "Коля",
-                lastName = "Николаенко",
+                firstName = "Name",
+                lastName = "Surname",
                 phone = "+380931234567"
             ),
             onEvent = {}

@@ -59,6 +59,18 @@ fun InfoSection(
 
 @Preview(showBackground = true)
 @Composable
+private fun InfoSectionBlankPreview() {
+    ProfilesTheme {
+        InfoSection(
+            icon = painterResource(R.drawable.phone_enabled_24px),
+            label = "Phone",
+            text = ""
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 private fun InfoSectionPreview() {
     ProfilesTheme {
         InfoSection(

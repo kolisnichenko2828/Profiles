@@ -53,13 +53,27 @@ fun CreateTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun CreateTextFieldPreview() {
+private fun CreateTextFieldBlankPreview() {
     ProfilesTheme {
         CreateTextField(
-            value = "Коля",
+            value = "",
             onValueChange = {},
             label = "First name",
             icon = painterResource(R.drawable.person_24px)
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CreateTextFieldPreview() {
+    ProfilesTheme {
+        CreateTextField(
+            value = "Name",
+            onValueChange = {},
+            label = "First name",
+            icon = painterResource(R.drawable.person_24px),
+            capitalization = KeyboardCapitalization.Words,
         )
     }
 }

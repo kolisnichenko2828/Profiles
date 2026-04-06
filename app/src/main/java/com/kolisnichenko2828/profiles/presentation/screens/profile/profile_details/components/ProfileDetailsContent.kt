@@ -89,8 +89,8 @@ private fun ProfileDetailsContentPreview() {
     ProfilesTheme {
         ProfileDetailsContent(
             profile = ProfileUiModel(
-                firstName = "Коля",
-                lastName = "Николаенко",
+                firstName = "Name",
+                lastName = "Surname",
                 phone = "+380931234567"
             )
         )

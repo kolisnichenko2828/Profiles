@@ -99,8 +99,8 @@ private fun ProfileDetailsScreenContentPreview() {
         ProfileDetailsScreenStateless(
             uiState = ProfileDetailsContract.State(
                 profile = ProfileUiModel(
-                    firstName = "Коля",
-                    lastName = "Николаенко",
+                    firstName = "Name",
+                    lastName = "Surname",
                     phone = "+380931234567"
                 ),
                 errorMessage = null
