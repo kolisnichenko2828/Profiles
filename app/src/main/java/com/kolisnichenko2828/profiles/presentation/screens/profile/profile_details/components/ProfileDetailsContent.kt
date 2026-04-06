@@ -25,10 +25,11 @@ import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun ProfileDetailsContent(
-    profile: ProfileUiModel
+    profile: ProfileUiModel,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

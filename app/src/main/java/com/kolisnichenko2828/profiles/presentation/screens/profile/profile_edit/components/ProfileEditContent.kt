@@ -35,12 +35,13 @@ import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 @Composable
 fun ProfileEditContent(
     uiState: ProfileEditContract.State,
-    onEvent: (ProfileEditContract.Event) -> Unit
+    onEvent: (ProfileEditContract.Event) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp)

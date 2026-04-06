@@ -27,7 +27,8 @@ import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 @Composable
 fun CreatePhotoField(
     imageUri: String?,
-    onImageSelected: (String) -> Unit
+    onImageSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -39,7 +40,7 @@ fun CreatePhotoField(
     )
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Box(

@@ -20,9 +20,12 @@ import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
-fun AvatarSection(uri: String?) {
+fun AvatarSection(
+    uri: String?,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Box(
