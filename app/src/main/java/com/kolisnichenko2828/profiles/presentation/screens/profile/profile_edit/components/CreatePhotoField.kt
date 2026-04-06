@@ -18,9 +18,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kolisnichenko2828.profiles.R
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun CreatePhotoField(
@@ -67,5 +69,16 @@ fun CreatePhotoField(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CreatePhotoFieldPreview() {
+    ProfilesTheme {
+        CreatePhotoField(
+            imageUri = null,
+            onImageSelected = {}
+        )
     }
 }

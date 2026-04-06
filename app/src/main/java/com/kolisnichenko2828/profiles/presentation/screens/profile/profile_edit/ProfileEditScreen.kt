@@ -9,9 +9,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.profiles.presentation.screens.components.ErrorMessage
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.ProfileEditContent
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -20,7 +22,6 @@ fun ProfileEditScreen(
     viewModel: ProfileEditViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val currentState = uiState
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -30,9 +31,20 @@ fun ProfileEditScreen(
         }
     }
 
+    ProfileEditScreenStateless(
+        uiState = uiState,
+        onEvent = { viewModel.setEvent(it) }
+    )
+}
+
+@Composable
+fun ProfileEditScreenStateless(
+    uiState: ProfileEditContract.State,
+    onEvent: (ProfileEditContract.Event) -> Unit
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
         when {
-            currentState.isLoading -> {
+            uiState.isLoading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -40,18 +52,60 @@ fun ProfileEditScreen(
                     CircularProgressIndicator()
                 }
             }
-            currentState.errorMessage != null -> {
+            uiState.errorMessage != null -> {
                 ErrorMessage(
-                    errorMessage = currentState.errorMessage,
-                    onRetry = { viewModel.setEvent(ProfileEditContract.Event.InitialLoad) }
+                    errorMessage = uiState.errorMessage,
+                    onRetry = { onEvent(ProfileEditContract.Event.InitialLoad) }
                 )
             }
             else -> {
                 ProfileEditContent(
                     uiState = uiState,
-                    onEvent = { viewModel.setEvent(it) }
+                    onEvent = onEvent
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileEditScreenLoadingPreview() {
+    ProfilesTheme {
+        ProfileEditScreenStateless(
+            uiState = ProfileEditContract.State(isLoading = true),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileEditScreenErrorPreview() {
+    ProfilesTheme {
+        ProfileEditScreenStateless(
+            uiState = ProfileEditContract.State(
+                isLoading = false,
+                errorMessage = "No internet"
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileEditScreenContentPreview() {
+    ProfilesTheme {
+        ProfileEditScreenStateless(
+            uiState = ProfileEditContract.State(
+                isLoading = false,
+                errorMessage = null,
+                firstName = "Коля",
+                lastName = "Николаенко",
+                phone = "+380931234567"
+            ),
+            onEvent = {}
+        )
     }
 }

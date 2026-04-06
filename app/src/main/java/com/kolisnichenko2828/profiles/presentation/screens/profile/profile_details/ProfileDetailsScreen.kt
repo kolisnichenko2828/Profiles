@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.screens.components.ErrorMessage
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.components.ProfileDetailsContent
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,24 +28,36 @@ fun ProfileDetailsScreen(
     viewModel: ProfileDetailsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val currentState = uiState
 
     LaunchedEffect(Unit) {
         viewModel.setEvent(ProfileDetailsContract.Event.InitialLoad)
     }
 
+    ProfileDetailsScreenStateless(
+        uiState = uiState,
+        onEvent = { viewModel.setEvent(it) },
+        onEditClick = onEditClick
+    )
+}
+
+@Composable
+fun ProfileDetailsScreenStateless(
+    uiState: ProfileDetailsContract.State,
+    onEvent: (ProfileDetailsContract.Event) -> Unit,
+    onEditClick: () -> Unit,
+) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
             when {
-                currentState.errorMessage != null -> {
+                uiState.errorMessage != null -> {
                     ErrorMessage(
-                        errorMessage = currentState.errorMessage,
-                        onRetry = { viewModel.setEvent(ProfileDetailsContract.Event.InitialLoad) }
+                        errorMessage = uiState.errorMessage,
+                        onRetry = { onEvent(ProfileDetailsContract.Event.InitialLoad) }
                     )
                 }
-                currentState.profile != null -> {
+                uiState.profile != null -> {
                     ProfileDetailsContent(
-                        profile = currentState.profile
+                        profile = uiState.profile
                     )
                 }
             }
@@ -60,5 +74,39 @@ fun ProfileDetailsScreen(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileDetailsScreenErrorPreview() {
+    ProfilesTheme {
+        ProfileDetailsScreenStateless(
+            uiState = ProfileDetailsContract.State(
+                profile = null,
+                errorMessage = "No internet"
+            ),
+            onEvent = {},
+            onEditClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileDetailsScreenContentPreview() {
+    ProfilesTheme {
+        ProfileDetailsScreenStateless(
+            uiState = ProfileDetailsContract.State(
+                profile = ProfileUiModel(
+                    firstName = "Коля",
+                    lastName = "Николаенко",
+                    phone = "+380931234567"
+                ),
+                errorMessage = null
+            ),
+            onEvent = {},
+            onEditClick = {}
+        )
     }
 }

@@ -10,9 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import com.kolisnichenko2828.profiles.R
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun CreateTextField(
@@ -45,4 +49,17 @@ fun CreateTextField(
         ),
         shape = MaterialTheme.shapes.medium
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CreateTextFieldPreview() {
+    ProfilesTheme {
+        CreateTextField(
+            value = "Коля",
+            onValueChange = {},
+            label = "First name",
+            icon = painterResource(R.drawable.person_24px)
+        )
+    }
 }

@@ -26,9 +26,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.ProfileEditContract
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun ProfileEditContent(
@@ -129,5 +131,22 @@ fun ProfileEditContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileEditContentPreview() {
+    ProfilesTheme {
+        ProfileEditContent(
+            uiState = ProfileEditContract.State(
+                isLoading = false,
+                errorMessage = null,
+                firstName = "Коля",
+                lastName = "Николаенко",
+                phone = "+380931234567"
+            ),
+            onEvent = {}
+        )
     }
 }

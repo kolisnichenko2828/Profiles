@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun InfoSection(
@@ -51,5 +54,17 @@ fun InfoSection(
                 }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InfoSectionPreview() {
+    ProfilesTheme {
+        InfoSection(
+            icon = painterResource(R.drawable.phone_enabled_24px),
+            label = "Phone",
+            text = "+380931234567"
+        )
     }
 }

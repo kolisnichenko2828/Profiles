@@ -17,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileUiModel
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
 fun ProfileDetailsContent(
@@ -77,5 +79,19 @@ fun ProfileDetailsContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileDetailsContentPreview() {
+    ProfilesTheme {
+        ProfileDetailsContent(
+            profile = ProfileUiModel(
+                firstName = "Коля",
+                lastName = "Николаенко",
+                phone = "+380931234567"
+            )
+        )
     }
 }
