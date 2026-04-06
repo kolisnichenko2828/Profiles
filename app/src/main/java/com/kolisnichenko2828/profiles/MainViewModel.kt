@@ -2,7 +2,7 @@ package com.kolisnichenko2828.profiles
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.profiles.domain.ProfileRepository
+import com.kolisnichenko2828.profiles.domain.interfaces.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,30 +27,23 @@ class MainViewModel(
 
     fun setEvent(event: MainContract.Event) {
         when (event) {
-            is MainContract.Event.InitialLoad -> { getOwnDetails() }
+            is MainContract.Event.InitialLoad -> { getProfile() }
         }
     }
 
-    private fun getOwnDetails() {
+    private fun getProfile() {
         viewModelScope.launch(Dispatchers.IO) {
-            val profile = repository.getProfile()
-            profile.fold(
-                onSuccess = {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            isProfileExist = true
-                        )
+            val result = repository.getProfile()
+
+            result.fold(
+                onSuccess = { profile ->
+                    if (profile != null) {
+                        _uiState.update { it.copy(isProfileExist = true) }
+                    } else {
+                        _uiState.update { it.copy(isProfileExist = false) }
                     }
                 },
-                onFailure = {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            isProfileExist = false
-                        )
-                    }
-                }
+                onFailure = { _uiState.update { it.copy(isProfileExist = false) } }
             )
         }
     }

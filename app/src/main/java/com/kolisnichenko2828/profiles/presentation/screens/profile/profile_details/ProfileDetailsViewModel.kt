@@ -2,8 +2,7 @@ package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_deta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.profiles.domain.ProfileRepository
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.model.toUi
+import com.kolisnichenko2828.profiles.domain.interfaces.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +21,7 @@ class ProfileDetailsViewModel(
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Lazily,
+            started = SharingStarted.WhileSubscribed(5000),
             initialValue = ProfileDetailsContract.State()
         )
 
@@ -44,10 +43,18 @@ class ProfileDetailsViewModel(
             val profileModel = repository.getProfile()
             profileModel.fold(
                 onSuccess = { profile ->
-                    _uiState.update {
-                        it.copy(
-                            profile = profile.toUi()
-                        )
+                    if (profile != null) {
+                        _uiState.update {
+                            it.copy(
+                                profile = profile.toUi()
+                            )
+                        }
+                    } else {
+                        _uiState.update {
+                            it.copy(
+                                profile = ProfileUiModel()
+                            )
+                        }
                     }
                 },
                 onFailure = { exception ->

@@ -15,10 +15,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_create.ProfileCreateScreen
-import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_details.DetailsScreen
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.ProfileEditScreen
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_details.ContactDetailsScreen
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileDetailsScreen
-import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_list.ListScreen
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_list.ContactsListScreen
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -38,8 +38,8 @@ fun ProfilesApp(
             sceneStrategy = listDetailStrategy,
             onBack = { backStack.removeLastOrNull() },
             entryProvider = entryProvider {
-                entry<Screen.ProfileCreate> {
-                    ProfileCreateScreen(
+                entry<Screen.ProfileEdit> {
+                    ProfileEditScreen(
                         onNavigateToDetails = {
                             backStack.clear()
                             backStack.add(Screen.ProfileDetails)
@@ -47,9 +47,13 @@ fun ProfilesApp(
                     )
                 }
                 entry<Screen.ProfileDetails> {
-                    ProfileDetailsScreen()
+                    ProfileDetailsScreen(
+                        onEditClick = {
+                            backStack.add(Screen.ProfileEdit)
+                        }
+                    )
                 }
-                entry<Screen.List>(
+                entry<Screen.ContactsList>(
                     metadata = ListDetailSceneStrategy.listPane(
                         detailPlaceholder = {
                             Box(
@@ -61,20 +65,20 @@ fun ProfilesApp(
                         }
                     ),
                     content = {
-                        ListScreen(
+                        ContactsListScreen(
                             onUserClick = { id ->
-                                if (backStack.lastOrNull() is Screen.Details ) {
+                                if (backStack.lastOrNull() is Screen.ContactDetails ) {
                                     backStack.removeAt(backStack.lastIndex)
                                 }
-                                backStack.add(Screen.Details(id))
+                                backStack.add(Screen.ContactDetails(id))
                             }
                         )
                     }
                 )
-                entry<Screen.Details>(
+                entry<Screen.ContactDetails>(
                     metadata = ListDetailSceneStrategy.detailPane()
                 ) {
-                    DetailsScreen(id = it.id)
+                    ContactDetailsScreen(id = it.id)
                 }
             }
         )
@@ -84,13 +88,13 @@ fun ProfilesApp(
 @Serializable
 sealed interface Screen : NavKey {
     @Serializable
-    object List : Screen
+    object ContactsList : Screen
     @Serializable
-    data class Details(val id: Int) : Screen
+    data class ContactDetails(val id: Int) : Screen
 
     @Serializable
     object ProfileDetails : Screen
 
     @Serializable
-    object ProfileCreate : Screen
+    object ProfileEdit : Screen
 }

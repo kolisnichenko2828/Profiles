@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.model.ProfileUiModel
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileUiModel
 
 @Composable
 fun ProfileDetailsContent(
@@ -32,13 +32,18 @@ fun ProfileDetailsContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AvatarSection(name = profile.firstName)
+        Text(
+            text = stringResource(R.string.my_profile),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold
+        )
+
+        AvatarSection(uri = profile.imageUri)
 
         Text(
             text = "${profile.firstName} ${profile.lastName}",
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            fontWeight = FontWeight.Bold
         )
 
         Card(
@@ -54,20 +59,16 @@ fun ProfileDetailsContent(
                     label = stringResource(R.string.phone),
                     text = profile.phone
                 )
-                HorizontalDivider(
-                    modifier = Modifier.padding(start = 56.dp, end = 16.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
+
+                HorizontalDivider(modifier = Modifier.padding(start = 56.dp, end = 16.dp))
 
                 InfoSection(
                     icon = painterResource(R.drawable.mail_24px),
                     label = stringResource(R.string.email),
                     text = profile.email
                 )
-                HorizontalDivider(
-                    modifier = Modifier.padding(start = 56.dp, end = 16.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant
-                )
+
+                HorizontalDivider(modifier = Modifier.padding(start = 56.dp, end = 16.dp))
 
                 InfoSection(
                     icon = painterResource(R.drawable.date_range_24px),

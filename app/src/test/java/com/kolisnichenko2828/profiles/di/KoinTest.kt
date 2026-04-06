@@ -13,9 +13,10 @@ class KoinTest : KoinTest {
     fun checkKoinModules() {
         val allModules = module {
             includes(
-                localModule,
-                repositoryModule,
-                presentationModule
+                databaseModule,
+                contactsModule,
+                profilesModule,
+                viewModelsModule
             )
         }
 

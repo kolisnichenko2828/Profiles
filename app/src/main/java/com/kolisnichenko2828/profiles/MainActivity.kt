@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 when {
-                    uiState.isLoading -> Unit
                     uiState.isProfileExist -> {
                         ProfilesApp(
                             startScreen = Screen.ProfileDetails
@@ -32,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     }
                     !uiState.isProfileExist -> {
                         ProfilesApp(
-                            startScreen = Screen.ProfileCreate
+                            startScreen = Screen.ProfileEdit
                         )
                     }
                 }

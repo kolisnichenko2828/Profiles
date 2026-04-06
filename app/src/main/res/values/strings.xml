@@ -1,11 +1,15 @@
 <resources>
     <string name="app_name">Profiles</string>
 
-    <string name="create_profile">Create Profile</string>
+    <string name="my_profile">My Profile</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="phone">Phone</string>
     <string name="email">Email</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="save">Save</string>
+
+    <string name="not_specified">Not specified</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="profile_image">Profile image</string>
 </resources>
