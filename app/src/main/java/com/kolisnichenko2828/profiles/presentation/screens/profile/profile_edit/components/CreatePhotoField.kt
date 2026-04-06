@@ -21,18 +21,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.kolisnichenko2828.profiles.R
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.ProfileEditContract
 
 @Composable
 fun CreatePhotoField(
-    uiState: ProfileEditContract.State,
-    onEvent: (ProfileEditContract.Event) -> Unit
+    imageUri: String?,
+    onImageSelected: (String) -> Unit
 ) {
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             if (uri != null) {
-                onEvent(ProfileEditContract.Event.ImageUriChanged(uri.toString()))
+                onImageSelected(uri.toString())
             }
         }
     )
@@ -53,7 +52,7 @@ fun CreatePhotoField(
                 },
             contentAlignment = Alignment.Center
         ) {
-            if (uiState.imageUri.isNullOrEmpty()) {
+            if (imageUri.isNullOrEmpty()) {
                 Icon(
                     painter = painterResource(R.drawable.person_24px),
                     contentDescription = stringResource(R.string.profile_image),
@@ -61,7 +60,7 @@ fun CreatePhotoField(
                 )
             } else {
                 AsyncImage(
-                    model = uiState.imageUri,
+                    model = imageUri,
                     contentDescription = stringResource(R.string.profile_image),
                     modifier = Modifier.size(120.dp),
                     contentScale = ContentScale.Crop

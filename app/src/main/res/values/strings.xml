@@ -12,4 +12,5 @@
     <string name="not_specified">Not specified</string>
     <string name="edit_profile">Edit profile</string>
     <string name="profile_image">Profile image</string>
+    <string name="retry">Retry</string>
 </resources>

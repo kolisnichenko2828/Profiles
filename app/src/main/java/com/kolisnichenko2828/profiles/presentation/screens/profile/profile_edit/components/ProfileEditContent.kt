@@ -53,8 +53,10 @@ fun ProfileEditContent(
         )
 
         CreatePhotoField(
-            uiState = uiState,
-            onEvent = onEvent
+            imageUri = uiState.imageUri,
+            onImageSelected = { newUri ->
+                onEvent(ProfileEditContract.Event.ImageUriChanged(newUri))
+            }
         )
 
         CreateTextField(

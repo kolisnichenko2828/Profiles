@@ -36,13 +36,7 @@ class MainViewModel(
             val result = repository.getProfile()
 
             result.fold(
-                onSuccess = { profile ->
-                    if (profile != null) {
-                        _uiState.update { it.copy(isProfileExist = true) }
-                    } else {
-                        _uiState.update { it.copy(isProfileExist = false) }
-                    }
-                },
+                onSuccess = { profile -> _uiState.update { it.copy(isProfileExist = profile != null) }},
                 onFailure = { _uiState.update { it.copy(isProfileExist = false) } }
             )
         }
