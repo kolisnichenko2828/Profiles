@@ -19,7 +19,7 @@ import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
-fun CreateTextField(
+fun EditTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -53,9 +53,9 @@ fun CreateTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun CreateTextFieldBlankPreview() {
+private fun EditTextFieldBlankPreview() {
     ProfilesTheme {
-        CreateTextField(
+        EditTextField(
             value = "",
             onValueChange = {},
             label = "First name",
@@ -66,9 +66,9 @@ private fun CreateTextFieldBlankPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun CreateTextFieldPreview() {
+private fun EditTextFieldPreview() {
     ProfilesTheme {
-        CreateTextField(
+        EditTextField(
             value = "Name",
             onValueChange = {},
             label = "First name",

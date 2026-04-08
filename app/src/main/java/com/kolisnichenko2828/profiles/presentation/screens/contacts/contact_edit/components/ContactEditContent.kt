@@ -32,8 +32,8 @@ import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.core.ContactCategory
 import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_details.ContactUiModel
 import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_edit.ContactEditContract
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.CreatePhotoField
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.CreateTextField
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.EditPhotoField
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.EditTextField
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
@@ -59,14 +59,14 @@ fun ContactEditContent(
             fontWeight = FontWeight.Bold,
         )
 
-        CreatePhotoField(
+        EditPhotoField(
             imageUri = uiState.currentContact.imageUri,
             onImageSelected = { newUri ->
                 onEvent(ContactEditContract.Event.ImageUriChanged(newUri))
             }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.currentContact.firstName,
             onValueChange = { onEvent(ContactEditContract.Event.FirstNameChanged(it)) },
             label = stringResource(R.string.first_name),
@@ -75,7 +75,7 @@ fun ContactEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.currentContact.lastName,
             onValueChange = { onEvent(ContactEditContract.Event.LastNameChanged(it)) },
             label = stringResource(R.string.last_name),
@@ -84,7 +84,7 @@ fun ContactEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.currentContact.phone,
             onValueChange = { onEvent(ContactEditContract.Event.PhoneChanged(it)) },
             label = stringResource(R.string.phone),
@@ -93,7 +93,7 @@ fun ContactEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.currentContact.email,
             onValueChange = { onEvent(ContactEditContract.Event.EmailChanged(it)) },
             label = stringResource(R.string.email),
@@ -102,7 +102,7 @@ fun ContactEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.currentContact.dateOfBirth,
             onValueChange = { onEvent(ContactEditContract.Event.DateOfBirthChanged(it)) },
             label = stringResource(R.string.date_of_birth),

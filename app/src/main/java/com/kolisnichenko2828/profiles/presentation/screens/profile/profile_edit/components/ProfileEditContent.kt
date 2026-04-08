@@ -55,14 +55,14 @@ fun ProfileEditContent(
             fontWeight = FontWeight.Bold,
         )
 
-        CreatePhotoField(
+        EditPhotoField(
             imageUri = uiState.imageUri,
             onImageSelected = { newUri ->
                 onEvent(ProfileEditContract.Event.ImageUriChanged(newUri))
             }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.firstName,
             onValueChange = { onEvent(ProfileEditContract.Event.FirstNameChanged(it)) },
             label = stringResource(R.string.first_name),
@@ -71,7 +71,7 @@ fun ProfileEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.lastName,
             onValueChange = { onEvent(ProfileEditContract.Event.LastNameChanged(it)) },
             label = stringResource(R.string.last_name),
@@ -80,7 +80,7 @@ fun ProfileEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.phone,
             onValueChange = { onEvent(ProfileEditContract.Event.PhoneChanged(it)) },
             label = stringResource(R.string.phone),
@@ -89,7 +89,7 @@ fun ProfileEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.email,
             onValueChange = { onEvent(ProfileEditContract.Event.EmailChanged(it)) },
             label = stringResource(R.string.email),
@@ -98,7 +98,7 @@ fun ProfileEditContent(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
         )
 
-        CreateTextField(
+        EditTextField(
             value = uiState.dateOfBirth,
             onValueChange = { onEvent(ProfileEditContract.Event.DateOfBirthChanged(it)) },
             label = stringResource(R.string.date_of_birth),

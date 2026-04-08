@@ -25,7 +25,7 @@ import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
 @Composable
-fun CreatePhotoField(
+fun EditPhotoField(
     imageUri: String?,
     onImageSelected: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -75,9 +75,9 @@ fun CreatePhotoField(
 
 @Preview(showBackground = true)
 @Composable
-private fun CreatePhotoFieldPreview() {
+private fun EditPhotoFieldPreview() {
     ProfilesTheme {
-        CreatePhotoField(
+        EditPhotoField(
             imageUri = null,
             onImageSelected = {}
         )
