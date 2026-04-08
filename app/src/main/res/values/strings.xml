@@ -13,4 +13,11 @@
     <string name="edit_profile">Edit profile</string>
     <string name="profile_image">Profile image</string>
     <string name="retry">Retry</string>
+
+    <string name="add_contact">Add contact</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="edit_contact">Edit contact</string>
+    <string name="contact">Contact</string>
+    <string name="category">Category</string>
+    <string name="contacts">Contacts</string>
 </resources>

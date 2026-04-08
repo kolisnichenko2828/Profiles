@@ -1,6 +1,6 @@
 package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details
 
-import com.kolisnichenko2828.profiles.domain.models.ProfileDomainModel
+import com.kolisnichenko2828.profiles.domain.models.ProfileModel
 
 data class ProfileUiModel(
     val imageUri: String? = null,
@@ -11,7 +11,7 @@ data class ProfileUiModel(
     val dateOfBirth: String = "",
 )
 
-fun ProfileDomainModel.toUi(): ProfileUiModel {
+fun ProfileModel.toUi(): ProfileUiModel {
     return ProfileUiModel(
         imageUri = this.imageUri,
         firstName = this.firstName,

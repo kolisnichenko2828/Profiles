@@ -1,10 +1,9 @@
 package com.kolisnichenko2828.profiles
 
 import android.app.Application
-import com.kolisnichenko2828.profiles.di.contactsModule
-import com.kolisnichenko2828.profiles.di.databaseModule
+import com.kolisnichenko2828.profiles.di.dataModule
+import com.kolisnichenko2828.profiles.di.repositoryModule
 import com.kolisnichenko2828.profiles.di.viewModelsModule
-import com.kolisnichenko2828.profiles.di.profilesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -14,7 +13,11 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(databaseModule, contactsModule, profilesModule, viewModelsModule)
+            modules(
+                dataModule,
+                repositoryModule,
+                viewModelsModule
+            )
         }
     }
 }

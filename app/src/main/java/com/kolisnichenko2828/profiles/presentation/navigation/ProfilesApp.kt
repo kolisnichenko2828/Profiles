@@ -11,22 +11,24 @@ import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneSt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.ProfileEditScreen
 import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_details.ContactDetailsScreen
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileDetailsScreen
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_edit.ContactEditScreen
 import com.kolisnichenko2828.profiles.presentation.screens.contacts.contacts_list.ContactsListScreen
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.ProfileDetailsScreen
+import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.ProfileEditScreen
+import com.kolisnichenko2828.profiles.presentation.screens.random.RandomScreen
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ProfilesApp(
-    startScreen: Screen
-) {
-    val backStack = rememberNavBackStack(startScreen)
+fun ProfilesApp() {
+    val backStack = rememberNavBackStack(Screen.ContactsList)
     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
     Scaffold(
@@ -34,51 +36,75 @@ fun ProfilesApp(
     ) { innerPadding ->
         NavDisplay(
             backStack = backStack,
-            modifier = Modifier.padding(innerPadding).fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             sceneStrategy = listDetailStrategy,
             onBack = { backStack.removeLastOrNull() },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator()
+            ),
             entryProvider = entryProvider {
                 entry<Screen.ProfileEdit> {
                     ProfileEditScreen(
                         onNavigateToDetails = {
                             backStack.clear()
                             backStack.add(Screen.ProfileDetails)
-                        }
+                        },
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
                 entry<Screen.ProfileDetails> {
                     ProfileDetailsScreen(
-                        onEditClick = {
-                            backStack.add(Screen.ProfileEdit)
-                        }
+                        onEditClick = { backStack.add(Screen.ProfileEdit) },
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
                 entry<Screen.ContactsList>(
                     metadata = ListDetailSceneStrategy.listPane(
                         detailPlaceholder = {
                             Box(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .padding(innerPadding)
+                                    .fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(text = "Select user")
                             }
                         }
-                    ),
-                    content = {
-                        ContactsListScreen(
-                            onUserClick = { id ->
-                                if (backStack.lastOrNull() is Screen.ContactDetails ) {
-                                    backStack.removeAt(backStack.lastIndex)
-                                }
-                                backStack.add(Screen.ContactDetails(id))
-                            }
-                        )
-                    }
-                )
+                    )
+                ) {
+                    ContactsListScreen(
+                        onContactClick = { backStack.add(Screen.ContactDetails(it)) },
+                        onAddClick = { backStack.add(Screen.Random) },
+                        onProfileClick = { backStack.add(Screen.ProfileDetails) }
+                    )
+                }
                 entry<Screen.ContactDetails>(
                     metadata = ListDetailSceneStrategy.detailPane()
                 ) {
-                    ContactDetailsScreen(id = it.id)
+                    ContactDetailsScreen(
+                        id = it.id,
+                        onEditClick = { backStack.add(Screen.ContactEdit(it.id)) },
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+                entry<Screen.ContactEdit> {
+                    ContactEditScreen(
+                        id = it.id,
+                        isNew = it.isNew,
+                        onNavigateToContacts = {
+                            backStack.subList(1, backStack.size).clear()
+                        },
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+                entry<Screen.Random> {
+                    RandomScreen(
+                        onContactClick = {
+                            backStack.add((Screen.ContactEdit(id = it, isNew = true)))
+                        },
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         )
@@ -88,13 +114,15 @@ fun ProfilesApp(
 @Serializable
 sealed interface Screen : NavKey {
     @Serializable
+    object Random : Screen
+    @Serializable
+    class ContactEdit(val id: String, val isNew: Boolean = false) : Screen
+    @Serializable
     object ContactsList : Screen
     @Serializable
-    data class ContactDetails(val id: Int) : Screen
-
+    class ContactDetails(val id: String) : Screen
     @Serializable
     object ProfileDetails : Screen
-
     @Serializable
     object ProfileEdit : Screen
 }

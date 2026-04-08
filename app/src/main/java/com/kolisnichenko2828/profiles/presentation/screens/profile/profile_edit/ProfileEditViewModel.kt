@@ -2,9 +2,10 @@ package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.profiles.domain.models.ProfileDomainModel
-import com.kolisnichenko2828.profiles.domain.interfaces.ProfileRepository
-import kotlinx.coroutines.Dispatchers
+import com.kolisnichenko2828.profiles.domain.interfaces.profile.ImageSaver
+import com.kolisnichenko2828.profiles.domain.interfaces.profile.ProfileProvider
+import com.kolisnichenko2828.profiles.domain.interfaces.profile.ProfileSaver
+import com.kolisnichenko2828.profiles.domain.models.ProfileModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,7 +17,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileEditViewModel(
-    val repository: ProfileRepository
+    private val imageSaver: ImageSaver,
+    private val profileSaver: ProfileSaver,
+    private val profileProvider: ProfileProvider,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileEditContract.State())
     val uiState = _uiState.asStateFlow()
@@ -61,8 +64,8 @@ class ProfileEditViewModel(
     }
 
     private fun saveImage(uri: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.saveImage(uri)
+        viewModelScope.launch {
+            val result = imageSaver.save(uri)
 
             result.fold(
                 onSuccess = { imageUri ->
@@ -76,10 +79,10 @@ class ProfileEditViewModel(
     }
 
     private fun loadProfile() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val result = repository.getProfile()
+            val result = profileProvider.get()
 
             result.fold(
                 onSuccess = { profile ->
@@ -118,11 +121,11 @@ class ProfileEditViewModel(
 
         if (currentState.firstName.isBlank() || currentState.lastName.isBlank()) return
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val result = repository.saveProfile(
-                profile = ProfileDomainModel(
+            val result = profileSaver.save(
+                profile = ProfileModel(
                     imageUri = currentState.imageUri,
                     firstName = currentState.firstName,
                     lastName = currentState.lastName,
@@ -140,7 +143,7 @@ class ProfileEditViewModel(
                         )
                     }
 
-                    _effect.send(ProfileEditContract.Effect.NavigateToProfile)
+                    _effect.send(ProfileEditContract.Effect.NavigateToDetails)
                 },
                 onFailure = { exception ->
                     _uiState.update {

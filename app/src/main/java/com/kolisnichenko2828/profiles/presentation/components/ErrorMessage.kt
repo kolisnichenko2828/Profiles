@@ -1,0 +1,67 @@
+package com.kolisnichenko2828.profiles.presentation.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.kolisnichenko2828.profiles.R
+import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
+
+@Composable
+fun ErrorMessage(
+    errorMessage: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.warning_24px),
+            contentDescription = null,
+            modifier = Modifier.size(64.dp),
+        )
+        Text(
+            text = errorMessage,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.error,
+            textAlign = TextAlign.Center
+        )
+        Button(onClick = onRetry) {
+            Icon(
+                painter = painterResource(R.drawable.refresh_24px),
+                contentDescription = null,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+            Text(text = stringResource(R.string.retry))
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ErrorMessagePreview() {
+    ProfilesTheme {
+        ErrorMessage(
+            errorMessage = "No internet",
+            onRetry = {}
+        )
+    }
+}

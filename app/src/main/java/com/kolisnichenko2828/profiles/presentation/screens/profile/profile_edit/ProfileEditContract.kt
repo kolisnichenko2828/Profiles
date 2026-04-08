@@ -27,6 +27,6 @@ interface ProfileEditContract {
     }
 
     sealed interface Effect {
-        object NavigateToProfile : Effect
+        object NavigateToDetails : Effect
     }
 }

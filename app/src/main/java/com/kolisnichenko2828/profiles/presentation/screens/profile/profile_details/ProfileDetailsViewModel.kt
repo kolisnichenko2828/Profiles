@@ -2,8 +2,7 @@ package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_deta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kolisnichenko2828.profiles.domain.interfaces.ProfileRepository
-import kotlinx.coroutines.Dispatchers
+import com.kolisnichenko2828.profiles.domain.interfaces.profile.ProfileProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileDetailsViewModel(
-    val repository: ProfileRepository
+    private val profileProvider: ProfileProvider
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileDetailsContract.State())
     val uiState = _uiState
@@ -27,12 +26,12 @@ class ProfileDetailsViewModel(
 
     fun setEvent(event: ProfileDetailsContract.Event) {
         when (event) {
-            is ProfileDetailsContract.Event.InitialLoad -> { getProfile() }
+            is ProfileDetailsContract.Event.InitialLoad -> { loadProfile() }
         }
     }
 
-    private fun getProfile() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun loadProfile() {
+        viewModelScope.launch {
             _uiState.update {
                 it.copy(
                     errorMessage = null,
@@ -40,8 +39,9 @@ class ProfileDetailsViewModel(
                 )
             }
 
-            val profileModel = repository.getProfile()
-            profileModel.fold(
+            val result = profileProvider.get()
+
+            result.fold(
                 onSuccess = { profile ->
                     if (profile != null) {
                         _uiState.update {

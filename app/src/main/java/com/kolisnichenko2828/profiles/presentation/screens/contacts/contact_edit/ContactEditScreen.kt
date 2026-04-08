@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit
+package com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_edit
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,28 +11,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kolisnichenko2828.profiles.core.ContactCategory
 import com.kolisnichenko2828.profiles.presentation.components.ErrorMessage
-import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_edit.components.ProfileEditContent
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_details.ContactUiModel
+import com.kolisnichenko2828.profiles.presentation.screens.contacts.contact_edit.components.ContactEditContent
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun ProfileEditScreen(
-    onNavigateToDetails: () -> Unit,
+fun ContactEditScreen(
+    id: String,
+    isNew: Boolean,
+    onNavigateToContacts: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileEditViewModel = koinViewModel()
+    viewModel: ContactEditViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(id, isNew) {
+        viewModel.setEvent(ContactEditContract.Event.InitialLoad(id, isNew))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is ProfileEditContract.Effect.NavigateToDetails -> onNavigateToDetails()
+                is ContactEditContract.Effect.NavigateToDetails -> onNavigateToContacts()
             }
         }
     }
 
-    ProfileEditScreenStateless(
+    ContactEditScreenStateless(
+        id = id,
+        isNew = isNew,
         uiState = uiState,
         onEvent = { viewModel.setEvent(it) },
         modifier = modifier
@@ -40,9 +50,11 @@ fun ProfileEditScreen(
 }
 
 @Composable
-fun ProfileEditScreenStateless(
-    uiState: ProfileEditContract.State,
-    onEvent: (ProfileEditContract.Event) -> Unit,
+fun ContactEditScreenStateless(
+    id: String,
+    isNew: Boolean,
+    uiState: ContactEditContract.State,
+    onEvent: (ContactEditContract.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier = modifier.fillMaxSize()) {
@@ -58,11 +70,11 @@ fun ProfileEditScreenStateless(
             uiState.errorMessage != null -> {
                 ErrorMessage(
                     errorMessage = uiState.errorMessage,
-                    onRetry = { onEvent(ProfileEditContract.Event.InitialLoad) }
+                    onRetry = { onEvent(ContactEditContract.Event.InitialLoad(id, isNew)) }
                 )
             }
             else -> {
-                ProfileEditContent(
+                ContactEditContent(
                     uiState = uiState,
                     onEvent = onEvent
                 )
@@ -73,10 +85,12 @@ fun ProfileEditScreenStateless(
 
 @Preview
 @Composable
-private fun ProfileEditScreenLoadingPreview() {
+private fun ContactEditScreenLoadingPreview() {
     ProfilesTheme {
-        ProfileEditScreenStateless(
-            uiState = ProfileEditContract.State(isLoading = true),
+        ContactEditScreenStateless(
+            id = "1",
+            isNew = false,
+            uiState = ContactEditContract.State(isLoading = true),
             onEvent = {}
         )
     }
@@ -84,10 +98,12 @@ private fun ProfileEditScreenLoadingPreview() {
 
 @Preview
 @Composable
-private fun ProfileEditScreenErrorPreview() {
+private fun ContactEditScreenErrorPreview() {
     ProfilesTheme {
-        ProfileEditScreenStateless(
-            uiState = ProfileEditContract.State(
+        ContactEditScreenStateless(
+            id = "1",
+            isNew = false,
+            uiState = ContactEditContract.State(
                 isLoading = false,
                 errorMessage = "No internet"
             ),
@@ -98,15 +114,24 @@ private fun ProfileEditScreenErrorPreview() {
 
 @Preview
 @Composable
-private fun ProfileEditScreenContentPreview() {
+private fun ContactEditScreenContentPreview() {
     ProfilesTheme {
-        ProfileEditScreenStateless(
-            uiState = ProfileEditContract.State(
+        ContactEditScreenStateless(
+            id = "1",
+            isNew = false,
+            uiState = ContactEditContract.State(
+                currentContact = ContactUiModel(
+                    id = "1",
+                    imageUri = null,
+                    firstName = "Name1",
+                    lastName = "Surname1",
+                    phone = "+380931234567",
+                    email = "example1@gmail.com",
+                    dateOfBirth = "1991-01-01",
+                    category = ContactCategory.WORK
+                ),
                 isLoading = false,
                 errorMessage = null,
-                firstName = "Name",
-                lastName = "Surname",
-                phone = "+380931234567"
             ),
             onEvent = {}
         )

@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.profiles.R
-import com.kolisnichenko2828.profiles.presentation.screens.components.ErrorMessage
+import com.kolisnichenko2828.profiles.presentation.components.ErrorMessage
 import com.kolisnichenko2828.profiles.presentation.screens.profile.profile_details.components.ProfileDetailsContent
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 import org.koin.androidx.compose.koinViewModel
@@ -25,6 +25,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ProfileDetailsScreen(
     onEditClick: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: ProfileDetailsViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -36,7 +37,8 @@ fun ProfileDetailsScreen(
     ProfileDetailsScreenStateless(
         uiState = uiState,
         onEvent = { viewModel.setEvent(it) },
-        onEditClick = onEditClick
+        onEditClick = onEditClick,
+        modifier = modifier
     )
 }
 
@@ -45,8 +47,9 @@ fun ProfileDetailsScreenStateless(
     uiState: ProfileDetailsContract.State,
     onEvent: (ProfileDetailsContract.Event) -> Unit,
     onEditClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
             when {
                 uiState.errorMessage != null -> {
