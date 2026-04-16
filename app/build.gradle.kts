@@ -34,6 +34,13 @@ android {
     }
 
     buildTypes {
+        all {
+            buildConfigField(
+                "String",
+                "RANDOM_API",
+                "\"${localProps.getProperty("RANDOM_API")}\""
+            )
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -41,20 +48,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String",
-                "RANDOM_API",
-                "\"${localProps.getProperty("RANDOM_API")}\""
-            )
         }
         debug {
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField(
-                "String",
-                "RANDOM_API",
-                "\"${localProps.getProperty("RANDOM_API")}\""
-            )
+
         }
     }
     compileOptions {
