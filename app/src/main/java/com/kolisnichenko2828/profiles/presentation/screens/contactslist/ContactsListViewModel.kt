@@ -42,17 +42,20 @@ class ContactsListViewModel(
 
     private fun deleteContact(id: String) {
         viewModelScope.launch {
-            try {
-                contactSaver.delete(id)
+            val result = contactSaver.delete(id)
 
-                _uiState.update { state ->
-                    state.copy(
-                        contacts = state.contacts.filter { it.id != id }
-                    )
+            result.fold(
+                onSuccess = {
+                    _uiState.update { state ->
+                        state.copy(
+                            contacts = state.contacts.filter { it.id != id }
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update { it.copy(error = exception.localizedMessage) }
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(error = "Не удалось удалить контакт") }
-            }
+            )
         }
     }
 
