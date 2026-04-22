@@ -43,8 +43,9 @@ fun ContactsListScreen(
         onAddClick = onAddClick,
         onProfileClick = onProfileClick,
         onRetry = { viewModel.setEvent(ContactsListContract.Event.InitialLoad) },
-        onItemVisible = { viewModel.setEvent(ContactsListContract.Event.OnItemVisible(it)) },
+        onItemVisible = { id -> viewModel.setEvent(ContactsListContract.Event.OnItemVisible(id)) },
         onLoadNext = { viewModel.setEvent(ContactsListContract.Event.LoadNext) },
+        onDeleteContact = { id -> viewModel.setEvent(ContactsListContract.Event.OnDeleteContact(id)) }
     )
 }
 
@@ -57,6 +58,7 @@ fun ContactsListScreenStateless(
     onRetry: () -> Unit,
     onItemVisible: (Int) -> Unit,
     onLoadNext: () -> Unit,
+    onDeleteContact: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -110,6 +112,7 @@ fun ContactsListScreenStateless(
                     isLoadingNext = uiState.isLoadingNext,
                     onItemVisible = onItemVisible,
                     onLoadNext = onLoadNext,
+                    onDeleteContact = onDeleteContact,
                     modifier = Modifier.padding(innerPadding)
                 )
             }
@@ -139,7 +142,8 @@ private fun ContactsListScreenLoadingPreview() {
             onAddClick = {},
             onProfileClick = {},
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
@@ -154,7 +158,8 @@ private fun ContactsListScreenErrorPreview() {
             onAddClick = {},
             onProfileClick = {},
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
@@ -169,7 +174,8 @@ private fun ContactsListScreenEmptyContentPreview() {
             onAddClick = {},
             onProfileClick = {},
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
@@ -207,7 +213,8 @@ private fun ContactsListScreenContentPreview() {
             onAddClick = {},
             onProfileClick = {},
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }

@@ -2,6 +2,7 @@ package com.kolisnichenko2828.profiles.presentation.screens.contactslist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kolisnichenko2828.profiles.domain.interfaces.contacts.ContactSaver
 import com.kolisnichenko2828.profiles.domain.interfaces.contacts.ContactsProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ContactsListViewModel(
-    private val contactsProvider: ContactsProvider
+    private val contactsProvider: ContactsProvider,
+    private val contactSaver: ContactSaver
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ContactsListContract.State())
     val uiState = _uiState.asStateFlow()
@@ -34,6 +36,26 @@ class ContactsListViewModel(
             is ContactsListContract.Event.InitialLoad -> observeContacts()
             is ContactsListContract.Event.OnItemVisible -> checkScrollPosition(event.index)
             is ContactsListContract.Event.LoadNext -> loadNextPage()
+            is ContactsListContract.Event.OnDeleteContact -> deleteContact(event.id)
+        }
+    }
+
+    private fun deleteContact(id: String) {
+        viewModelScope.launch {
+            val result = contactSaver.delete(id)
+
+            result.fold(
+                onSuccess = {
+                    _uiState.update { state ->
+                        state.copy(
+                            contacts = state.contacts.filter { it.id != id }
+                        )
+                    }
+                },
+                onFailure = { exception ->
+                    _uiState.update { it.copy(error = exception.localizedMessage) }
+                }
+            )
         }
     }
 

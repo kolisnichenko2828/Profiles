@@ -12,5 +12,6 @@ interface ContactsListContract {
         object InitialLoad : Event
         object LoadNext : Event
         class OnItemVisible(val index: Int) : Event
+        class OnDeleteContact(val id: String) : Event
     }
 }
