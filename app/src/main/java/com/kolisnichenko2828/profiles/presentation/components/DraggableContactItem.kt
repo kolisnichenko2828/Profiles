@@ -26,12 +26,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
@@ -44,13 +43,26 @@ enum class DragAnchors { Start, End }
 @Composable
 fun DraggableContactItem(
     id: String,
-    swipeCoordinator: SwipeCoordinator,
     onDeleteConfirm: (String) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var closeItemCallback by remember { mutableStateOf<(() -> Unit)?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val density = LocalDensity.current
+    val actionSize = 80.dp
+    val actionSizePx = with(density) { actionSize.toPx() }
+
+    val state = remember {
+        AnchoredDraggableState(
+            initialValue = DragAnchors.Start,
+            anchors = DraggableAnchors {
+                DragAnchors.Start at 0f
+                DragAnchors.End at -actionSizePx
+            }
+        )
+    }
 
     if (showDialog) {
         DeleteConfirmationDialog(
@@ -60,63 +72,32 @@ fun DraggableContactItem(
             },
             onDismiss = {
                 showDialog = false
-                closeItemCallback?.invoke()
+                coroutineScope.launch { state.animateTo(DragAnchors.Start) }
             }
         )
     }
 
     DraggableContactItemStateless(
         modifier = modifier,
+        state = state,
         onDeleteClick = { showDialog = true },
-        onInteraction = { closeAction ->
-            closeItemCallback = closeAction
-            swipeCoordinator.onItemInteraction(id, closeAction)
-        },
+        actionSize = actionSize,
         content = content
     )
 }
 
 @Composable
 fun DraggableContactItemStateless(
+    state: AnchoredDraggableState<DragAnchors>,
     onDeleteClick: () -> Unit,
-    onInteraction: (closeItem: () -> Unit) -> Unit,
+    actionSize: Dp,
     modifier: Modifier = Modifier,
-    initialDragAnchor: DragAnchors = DragAnchors.Start,
     content: @Composable () -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
-    val actionSize = 80.dp
-    val actionSizePx = with(density) { actionSize.toPx() }
-
-    val state = remember {
-        AnchoredDraggableState(
-            initialValue = initialDragAnchor,
-            anchors = DraggableAnchors {
-                DragAnchors.Start at 0f
-                DragAnchors.End at -actionSizePx
-            }
-        )
-    }
-
-    val closeItem: () -> Unit = {
-        coroutineScope.launch { state.animateTo(DragAnchors.Start) }
-    }
-
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(CardDefaults.shape)
-            .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent(PointerEventPass.Initial)
-                        if (event.changes.any { it.pressed && !it.previousPressed }) {
-                            onInteraction(closeItem)
-                        }
-                    }
-                }
-            }
     ) {
         Box(
             modifier = Modifier
@@ -160,13 +141,26 @@ fun DraggableContactItemStateless(
 @Composable
 fun DraggableContactItemPreview() {
     ProfilesTheme {
-        DraggableContactItemStateless(
-            initialDragAnchor = DragAnchors.Start,
-            onDeleteClick = {},
-            onInteraction = {}
-        ) {
-            ContactItemCard("Name Surname")
+        val density = LocalDensity.current
+        val actionSize = 80.dp
+        val actionSizePx = with(density) { actionSize.toPx() }
+
+        val state = remember {
+            AnchoredDraggableState(
+                initialValue = DragAnchors.Start,
+                anchors = DraggableAnchors {
+                    DragAnchors.Start at 0f
+                    DragAnchors.End at -actionSizePx
+                }
+            )
         }
+
+        DraggableContactItemStateless(
+            state = state,
+            actionSize = actionSize,
+            onDeleteClick = {},
+            content = { ContactItemCard("Name Surname") }
+        )
     }
 }
 
@@ -174,31 +168,25 @@ fun DraggableContactItemPreview() {
 @Composable
 fun DraggableContactItemSwipedPreview() {
     ProfilesTheme {
+        val density = LocalDensity.current
+        val actionSize = 80.dp
+        val actionSizePx = with(density) { actionSize.toPx() }
+
+        val state = remember {
+            AnchoredDraggableState(
+                initialValue = DragAnchors.End,
+                anchors = DraggableAnchors {
+                    DragAnchors.Start at 0f
+                    DragAnchors.End at -actionSizePx
+                }
+            )
+        }
+
         DraggableContactItemStateless(
-            initialDragAnchor = DragAnchors.End,
+            state = state,
+            actionSize = actionSize,
             onDeleteClick = {},
-            onInteraction = {}
-        ) {
-            ContactItemCard("Name Surname")
-        }
-    }
-}
-
-class SwipeCoordinator {
-    private var currentOpenedId: String? = null
-    private var closeAction: (() -> Unit)? = null
-
-    fun onItemInteraction(id: String, closeThisItem: () -> Unit) {
-        if (currentOpenedId != id) {
-            closeAction?.invoke()
-
-            currentOpenedId = id
-            closeAction = closeThisItem
-        }
-    }
-
-    fun clear() {
-        currentOpenedId = null
-        closeAction = null
+            content = { ContactItemCard("Name Surname") }
+        )
     }
 }
