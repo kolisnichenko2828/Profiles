@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Profiles</string>
 
-    <string name="my_profile">My Profile</string>
+    <string name="my_profile">My profile</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="phone">Phone</string>
@@ -23,4 +23,8 @@
 
     <string name="choose_category">Choose category</string>
     <string name="cancel">Cancel</string>
+
+    <string name="delete_contact">Delete contact</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete">Delete</string>
 </resources>

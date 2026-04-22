@@ -36,6 +36,21 @@ class ContactsRepositoryImpl(
         }
     }
 
+    override suspend fun delete(id: String): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            val result = runCatching { dao.delete(id) }
+            result.fold(
+                onSuccess = {
+                    Result.success(Unit)
+                },
+                onFailure = { localException ->
+                    if (localException is CancellationException) throw localException
+                    Result.failure(localException)
+                }
+            )
+        }
+    }
+
     override suspend fun getAll(limit: Int): Flow<List<ContactModel>> {
         return withContext(Dispatchers.IO) {
             dao.getAll(limit).map { it.toDomain() }

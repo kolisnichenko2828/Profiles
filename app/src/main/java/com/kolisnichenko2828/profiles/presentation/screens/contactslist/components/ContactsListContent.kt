@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.kolisnichenko2828.profiles.R
 import com.kolisnichenko2828.profiles.core.ContactCategory
 import com.kolisnichenko2828.profiles.presentation.components.ContactItemCard
+import com.kolisnichenko2828.profiles.presentation.components.DraggableContactItem
+import com.kolisnichenko2828.profiles.presentation.components.SwipeCoordinator
 import com.kolisnichenko2828.profiles.presentation.screens.contactslist.ContactUiModel
 import com.kolisnichenko2828.profiles.presentation.theme.ProfilesTheme
 
@@ -34,8 +37,11 @@ fun ContactsListContent(
     isError: String?,
     onItemVisible: (Int) -> Unit,
     onLoadNext: () -> Unit,
+    onDeleteContact: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val swipeCoordinator = remember { SwipeCoordinator() }
+
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -45,9 +51,19 @@ fun ContactsListContent(
             items = contacts,
             key = { _, contact -> contact.id }
         ) { index, contact ->
-            ContactItemCard(
-                lastName = contact.lastName
-            )
+
+            DraggableContactItem(
+                id = contact.id,
+                swipeCoordinator = swipeCoordinator,
+                onDeleteConfirm = { id ->
+                    onDeleteContact(id)
+                    swipeCoordinator.clear()
+                }
+            ) {
+                ContactItemCard(
+                    lastName = contact.lastName
+                )
+            }
 
             LaunchedEffect(index) {
                 onItemVisible(index)
@@ -119,7 +135,8 @@ private fun ContactsListContentPreview() {
             isLoadingNext = false,
             isError = null,
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
@@ -154,7 +171,8 @@ private fun ContactsListContentNextPageLoadingPreview() {
             isLoadingNext = true,
             isError = null,
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
@@ -189,7 +207,8 @@ private fun ContactsListContentNextPageErrorPreview() {
             isLoadingNext = false,
             isError = "No internet",
             onItemVisible = {},
-            onLoadNext = {}
+            onLoadNext = {},
+            onDeleteContact = {}
         )
     }
 }
